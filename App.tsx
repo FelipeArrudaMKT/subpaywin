@@ -11,9 +11,17 @@ import { SprayCan, Zap, ShieldCheck, DollarSign, TrendingUp } from 'lucide-react
 
 const App: React.FC = () => {
   useEffect(() => {
-    // Hide native loader if it somehow persists
-    const loader = document.getElementById('loading-screen');
-    if (loader) loader.style.display = 'none';
+    // Immediate safe cleanup of loader on mount
+    const removeLoader = () => {
+      const loader = document.getElementById('loading-screen');
+      if (loader) {
+        loader.style.opacity = '0';
+        loader.style.pointerEvents = 'none';
+        setTimeout(() => loader.remove(), 500);
+      }
+    };
+    
+    removeLoader();
   }, []);
 
   return (
@@ -93,13 +101,11 @@ const App: React.FC = () => {
           </div>
         </section>
 
-        {/* Dynamic Urban Spacer - Alta Performance (SEM IMAGENS EXTERNAS) */}
+        {/* Dynamic Urban Spacer - Alta Performance */}
         <section className="w-full py-24 px-6 overflow-hidden">
           <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-12">
             <div className="w-full md:w-1/2 relative">
-              {/* Outer Glow Effect */}
               <div className="absolute -inset-4 bg-green-500/10 blur-3xl rounded-full animate-breathe"></div>
-              
               <TechPerformanceCard />
             </div>
             
@@ -108,7 +114,7 @@ const App: React.FC = () => {
                 ESTRATÉGIA DE <br /> <span className="text-green-500 underline decoration-yellow-500 underline-offset-8">ALTA PRECISÃO</span>
               </h3>
               <p className="text-gray-400 text-lg italic leading-relaxed">
-                Nossa tecnologia processa milhares de dados em tempo real para entregar a você a melhor experiência. O SubPay Win não é apenas um jogo, é onde a estratégia encontra o resultado através de algoritmos de alta performance.
+                Nossa tecnologia processa milhares de dados em tempo real para entregar a você a melhor experiência. O SubPay Win não é apenas um jogo, é onde a estratégia encontra o resultado.
               </p>
               <div className="flex flex-wrap justify-center md:justify-start gap-4">
                  <div className="flex items-center gap-2 text-white font-bold bg-white/5 px-6 py-3 rounded-2xl border border-white/10 hover:border-green-500/50 transition-colors cursor-default">
@@ -167,16 +173,6 @@ const App: React.FC = () => {
           </div>
         </div>
       </footer>
-
-      {/* Global Animations for the App */}
-      <style>{`
-        @keyframes scan {
-          0% { top: 0; opacity: 0; }
-          10% { opacity: 1; }
-          90% { opacity: 1; }
-          100% { top: 100%; opacity: 0; }
-        }
-      `}</style>
     </div>
   );
 };

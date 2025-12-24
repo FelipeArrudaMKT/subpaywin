@@ -96,6 +96,13 @@
         text-align: center;
         padding: 2rem;
       }
+
+      /* Loader Transition */
+      #loading-screen.fade-out {
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.5s ease-out;
+      }
     </style>
     <script type="importmap">
     {
@@ -114,7 +121,7 @@
       <!-- Loading placeholder to avoid black screen -->
       <div id="loading-screen" style="position:fixed; inset:0; background:#050505; display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:9999;">
         <div style="width:40px; height:40px; border:3px solid #22c55e; border-top-color:transparent; border-radius:50%; animation: spin 1s linear infinite;"></div>
-        <p style="margin-top:1rem; font-family:'Orbitron', sans-serif; color:#22c55e; font-size:0.75rem; letter-spacing:0.2em; text-transform:uppercase;">SubPay Win Loading</p>
+        <p style="margin-top:1rem; font-family:'Orbitron', sans-serif; color:#22c55e; font-size:0.75rem; letter-spacing:0.2em; text-transform:uppercase;">SubPay Win Carregando</p>
       </div>
     </div>
     <style>@keyframes spin { to { transform: rotate(360deg); } }</style>
@@ -125,14 +132,23 @@
       </div>
     </noscript>
     <script type="module" src="index.tsx"></script>
-    <script type="module">
-      // Clean up loader after a small delay to ensure React is ready
-      window.addEventListener('load', () => {
-        setTimeout(() => {
-          document.getElementById('loading-screen')?.fadeOut?.();
-          document.getElementById('loading-screen')?.remove();
-        }, 500);
-      });
+    <script>
+      // FAIL-SAFE: Remove loader no matter what after 1.5 seconds
+      (function() {
+        const removeLoader = () => {
+          const loader = document.getElementById('loading-screen');
+          if (loader) {
+            loader.classList.add('fade-out');
+            setTimeout(() => loader.remove(), 500);
+          }
+        };
+        
+        // Remove if window loads early
+        window.addEventListener('load', removeLoader);
+        
+        // Hard timeout to prevent infinite loading if assets hang
+        setTimeout(removeLoader, 1500);
+      })();
     </script>
   </body>
 </html>
