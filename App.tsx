@@ -11,13 +11,19 @@ import { SprayCan, Zap, ShieldCheck, DollarSign, TrendingUp } from 'lucide-react
 
 const App: React.FC = () => {
   useEffect(() => {
-    // Safe removal of the global loader once the app components are ready
-    const loader = document.getElementById('loading-screen');
-    if (loader) {
-      loader.classList.add('fade-out');
-      setTimeout(() => {
-        if (loader.parentNode) loader.parentNode.removeChild(loader);
-      }, 600);
+    // Garante que o loader saia da tela
+    if (typeof window !== 'undefined') {
+      const loader = document.getElementById('loading-screen');
+      if (loader) {
+        loader.classList.add('fade-out');
+        setTimeout(() => {
+          if (loader.parentNode) loader.parentNode.removeChild(loader);
+        }, 500);
+      }
+      
+      // Remove debug tag se existir
+      const debugTag = document.getElementById('debug-tag');
+      if (debugTag) debugTag.style.display = 'none';
     }
   }, []);
 
@@ -28,15 +34,15 @@ const App: React.FC = () => {
       <SocialProofNotifications />
 
       {/* Top Bar / Logo */}
-      <header className="relative z-20 flex justify-center py-6 md:py-10">
+      <header className="relative z-30 flex justify-center py-6 md:py-10">
         <div className="font-urban text-2xl md:text-4xl font-black italic flex items-center gap-2">
           <span className="text-green-500">SUBPAY</span>
           <span className="gold-text">WIN</span>
         </div>
       </header>
 
-      {/* Main Content - Forced visible and relatively positioned */}
-      <main className="relative z-10 flex-1 flex flex-col items-center opacity-100">
+      {/* Main Content - Z-index garantido para estar acima do background */}
+      <main className="relative z-20 flex-1 flex flex-col items-center">
         
         {/* Hero Section */}
         <section className="w-full px-6 pt-12 pb-24 text-center max-w-5xl mx-auto">
@@ -68,7 +74,7 @@ const App: React.FC = () => {
         </section>
 
         {/* Benefits Grid */}
-        <section className="w-full py-20 px-6 bg-gradient-to-t from-black to-transparent">
+        <section className="w-full py-20 px-6 bg-gradient-to-t from-black to-transparent relative z-20">
           <div className="max-w-6xl mx-auto">
             <h3 className="font-urban text-center text-2xl md:text-4xl font-black mb-16 uppercase italic text-white">
               VANTAGEM <span className="text-green-500">EXPERIENCE</span>
@@ -99,7 +105,7 @@ const App: React.FC = () => {
         </section>
 
         {/* Dynamic Urban Spacer - Alta Performance */}
-        <section className="w-full py-24 px-6 overflow-hidden">
+        <section className="w-full py-24 px-6 overflow-hidden relative z-20">
           <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-12">
             <div className="w-full md:w-1/2 relative">
               <div className="absolute -inset-4 bg-green-500/10 blur-3xl rounded-full animate-breathe"></div>
@@ -128,8 +134,8 @@ const App: React.FC = () => {
           </div>
         </section>
 
-        {/* Final Replay CTA */}
-        <section className="w-full py-32 px-6">
+        {/* Final CTA */}
+        <section className="w-full py-32 px-6 relative z-20">
           <div className="max-w-4xl mx-auto text-center space-y-12 relative">
             <div className="absolute -top-12 -left-12 opacity-10 rotate-12 scale-150">
               <SprayCan className="w-48 h-48 text-green-500" />
@@ -150,7 +156,7 @@ const App: React.FC = () => {
       </main>
 
       {/* Footer */}
-      <footer className="relative z-20 py-16 px-6 bg-black border-t border-white/5 text-center">
+      <footer className="relative z-30 py-16 px-6 bg-black border-t border-white/5 text-center">
         <div className="max-w-6xl mx-auto space-y-8">
           <div className="font-urban text-2xl font-black italic">
             <span className="text-green-500">SUBPAY</span>

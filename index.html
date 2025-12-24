@@ -16,20 +16,23 @@
       
       * { margin: 0; padding: 0; box-sizing: border-box; }
 
-      body {
-        font-family: 'Inter', sans-serif;
-        background-color: var(--bg-color);
-        color: #ffffff;
-        overflow-x: hidden;
+      /* FORÇA VISIBILIDADE GLOBAL */
+      html, body {
+        background-color: var(--bg-color) !important;
+        color: #ffffff !important;
+        opacity: 1 !important;
+        visibility: visible !important;
         min-height: 100vh;
       }
 
-      /* Force visibility on root and its children to prevent black screen issues */
+      /* CONTAINER PRINCIPAL SEMPRE VISÍVEL */
       #root {
         display: block !important;
         opacity: 1 !important;
         visibility: visible !important;
         min-height: 100vh;
+        position: relative;
+        z-index: 1;
       }
 
       .font-urban { font-family: 'Orbitron', sans-serif; }
@@ -86,7 +89,7 @@
         animation: slideIn 0.6s cubic-bezier(0.23, 1, 0.32, 1) forwards;
       }
 
-      /* Loader Transition - now separate from root to allow fade effect */
+      /* Loader Transition */
       #loading-screen {
         position: fixed;
         inset: 0;
@@ -95,8 +98,8 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        z-index: 10000;
-        transition: opacity 0.5s ease-out, visibility 0.5s;
+        z-index: 9998;
+        transition: opacity 0.4s ease-out, visibility 0.4s;
       }
       
       #loading-screen.fade-out {
@@ -131,7 +134,9 @@
     </script>
   </head>
   <body>
-    <!-- Loader is OUTSIDE root so React mounting doesn't kill it before the animation starts -->
+    <!-- TESTE DE VISIBILIDADE FORÇADA -->
+    <h1 id="debug-tag" style="color:rgba(34,197,94,0.3); position:fixed; top:10px; right:10px; z-index:9999; font-family:sans-serif; font-size:10px; pointer-events:none;">SUBPAY WIN ACTIVE</h1>
+
     <div id="loading-screen">
       <div style="width:40px; height:40px; border:3px solid #22c55e; border-top-color:transparent; border-radius:50%; animation: spin 1s linear infinite;"></div>
       <p style="margin-top:1rem; font-family:'Orbitron', sans-serif; color:#22c55e; font-size:0.75rem; letter-spacing:0.2em; text-transform:uppercase;">SubPay Win Carregando</p>
@@ -145,25 +150,35 @@
         <p>Ative o JavaScript para visualizar o site e começar a jogar.</p>
       </div>
     </noscript>
+    
     <script type="module" src="index.tsx"></script>
+    
     <script>
       (function() {
         const removeLoader = () => {
           const loader = document.getElementById('loading-screen');
           if (loader) {
             loader.classList.add('fade-out');
-            // Complete removal from DOM after animation
             setTimeout(() => {
               if (loader.parentNode) loader.parentNode.removeChild(loader);
-            }, 600);
+            }, 500);
           }
         };
         
-        // Safety trigger: ensure the site is visible within 1.5s max
-        setTimeout(removeLoader, 1500);
+        // Fail-safe absoluto: remove loader em no máximo 2 segundos
+        setTimeout(removeLoader, 2000);
         
-        // Also trigger on full window load for better UX if it's faster
+        // Escuta o mount do React via evento customizado opcional ou load
         window.addEventListener('load', removeLoader);
+        
+        // Proteção extra para garantir que o root não suma
+        setInterval(() => {
+          const root = document.getElementById('root');
+          if (root && root.style.opacity === '0') {
+             root.style.opacity = '1';
+             root.style.visibility = 'visible';
+          }
+        }, 1000);
       })();
     </script>
   </body>
