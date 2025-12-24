@@ -16,7 +16,6 @@
       
       * { margin: 0; padding: 0; box-sizing: border-box; }
 
-      /* FORÇA VISIBILIDADE GLOBAL */
       html, body {
         background-color: var(--bg-color) !important;
         color: #ffffff !important;
@@ -25,7 +24,6 @@
         min-height: 100vh;
       }
 
-      /* CONTAINER PRINCIPAL SEMPRE VISÍVEL */
       #root {
         display: block !important;
         opacity: 1 !important;
@@ -69,27 +67,12 @@
       }
       .animate-float { animation: float 6s ease-in-out infinite; }
 
-      @keyframes slowPan {
-        0%, 100% { transform: translateX(-1%); }
-        50% { transform: translateX(1%); }
-      }
-      .animate-slow-pan { animation: slowPan 25s ease-in-out infinite; }
-
       @keyframes breathe {
         0%, 100% { opacity: 0.4; }
         50% { opacity: 0.7; }
       }
       .animate-breathe { animation: breathe 10s ease-in-out infinite; }
 
-      @keyframes slideIn {
-        from { transform: translateX(-50%) translateY(20px); opacity: 0; }
-        to { transform: translateX(0) translateY(0); opacity: 1; }
-      }
-      .notification-appear {
-        animation: slideIn 0.6s cubic-bezier(0.23, 1, 0.32, 1) forwards;
-      }
-
-      /* Loader Transition */
       #loading-screen {
         position: fixed;
         inset: 0;
@@ -109,17 +92,6 @@
       }
 
       @keyframes spin { to { transform: rotate(360deg); } }
-
-      noscript div {
-        background: #050505;
-        color: white;
-        height: 100vh;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-        padding: 2rem;
-      }
     </style>
     <script type="importmap">
     {
@@ -134,20 +106,16 @@
     </script>
   </head>
   <body>
-    <!-- TESTE DE VISIBILIDADE FORÇADA -->
-    <h1 id="debug-tag" style="color:rgba(34,197,94,0.3); position:fixed; top:10px; right:10px; z-index:9999; font-family:sans-serif; font-size:10px; pointer-events:none;">SUBPAY WIN ACTIVE</h1>
-
     <div id="loading-screen">
       <div style="width:40px; height:40px; border:3px solid #22c55e; border-top-color:transparent; border-radius:50%; animation: spin 1s linear infinite;"></div>
-      <p style="margin-top:1rem; font-family:'Orbitron', sans-serif; color:#22c55e; font-size:0.75rem; letter-spacing:0.2em; text-transform:uppercase;">SubPay Win Carregando</p>
+      <p style="margin-top:1rem; font-family:'Orbitron', sans-serif; color:#22c55e; font-size:0.75rem; letter-spacing:0.2em; text-transform:uppercase;">Iniciando Sistema</p>
     </div>
 
     <div id="root"></div>
 
     <noscript>
-      <div>
-        <h1>SubPay Win</h1>
-        <p>Ative o JavaScript para visualizar o site e começar a jogar.</p>
+      <div style="background:#050505; color:white; height:100vh; display:flex; align-items:center; justify-content:center; text-align:center;">
+        <h1>Ative o JavaScript para jogar SubPay Win.</h1>
       </div>
     </noscript>
     
@@ -159,26 +127,11 @@
           const loader = document.getElementById('loading-screen');
           if (loader) {
             loader.classList.add('fade-out');
-            setTimeout(() => {
-              if (loader.parentNode) loader.parentNode.removeChild(loader);
-            }, 500);
+            setTimeout(() => { if (loader.parentNode) loader.parentNode.removeChild(loader); }, 500);
           }
         };
-        
-        // Fail-safe absoluto: remove loader em no máximo 2 segundos
-        setTimeout(removeLoader, 2000);
-        
-        // Escuta o mount do React via evento customizado opcional ou load
+        setTimeout(removeLoader, 1500);
         window.addEventListener('load', removeLoader);
-        
-        // Proteção extra para garantir que o root não suma
-        setInterval(() => {
-          const root = document.getElementById('root');
-          if (root && root.style.opacity === '0') {
-             root.style.opacity = '1';
-             root.style.visibility = 'visible';
-          }
-        }, 1000);
       })();
     </script>
   </body>

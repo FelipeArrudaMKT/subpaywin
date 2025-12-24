@@ -7,11 +7,10 @@ import { SocialProofNotifications } from './components/SocialProofNotifications'
 import { BENEFITS } from './constants';
 import { AIPredictor } from './components/AIPredictor';
 import { TechPerformanceCard } from './components/TechPerformanceCard';
-import { SprayCan, Zap, ShieldCheck, DollarSign, TrendingUp } from 'lucide-react';
+import { SprayCan, ShieldCheck, DollarSign, TrendingUp } from 'lucide-react';
 
 const App: React.FC = () => {
   useEffect(() => {
-    // Garante que o loader saia da tela
     if (typeof window !== 'undefined') {
       const loader = document.getElementById('loading-screen');
       if (loader) {
@@ -20,20 +19,16 @@ const App: React.FC = () => {
           if (loader.parentNode) loader.parentNode.removeChild(loader);
         }, 500);
       }
-      
-      // Remove debug tag se existir
-      const debugTag = document.getElementById('debug-tag');
-      if (debugTag) debugTag.style.display = 'none';
     }
   }, []);
 
   return (
-    <div className="min-h-screen relative flex flex-col bg-[#050505] opacity-100 visible">
+    <div className="min-h-screen relative flex flex-col bg-[#050505]">
       <RunnerBackground />
       <FloatingElements />
       <SocialProofNotifications />
 
-      {/* Top Bar / Logo */}
+      {/* Header */}
       <header className="relative z-30 flex justify-center py-6 md:py-10">
         <div className="font-urban text-2xl md:text-4xl font-black italic flex items-center gap-2">
           <span className="text-green-500">SUBPAY</span>
@@ -41,7 +36,7 @@ const App: React.FC = () => {
         </div>
       </header>
 
-      {/* Main Content - Z-index garantido para estar acima do background */}
+      {/* Main Content */}
       <main className="relative z-20 flex-1 flex flex-col items-center">
         
         {/* Hero Section */}
@@ -104,7 +99,7 @@ const App: React.FC = () => {
           </div>
         </section>
 
-        {/* Dynamic Urban Spacer - Alta Performance */}
+        {/* Performance Section */}
         <section className="w-full py-24 px-6 overflow-hidden relative z-20">
           <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-12">
             <div className="w-full md:w-1/2 relative">
@@ -134,7 +129,7 @@ const App: React.FC = () => {
           </div>
         </section>
 
-        {/* Final CTA */}
+        {/* CTA Section */}
         <section className="w-full py-32 px-6 relative z-20">
           <div className="max-w-4xl mx-auto text-center space-y-12 relative">
             <div className="absolute -top-12 -left-12 opacity-10 rotate-12 scale-150">
@@ -162,18 +157,11 @@ const App: React.FC = () => {
             <span className="text-green-500">SUBPAY</span>
             <span className="gold-text">WIN</span>
           </div>
-          
           <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-green-500/20 to-transparent"></div>
-          
-          <div className="space-y-4">
-            <p className="text-gray-400 text-[10px] font-bold uppercase tracking-[0.2em] leading-loose max-w-xl mx-auto">
-              SubPay Win &copy; {new Date().getFullYear()}. Todos os direitos reservados. <br />
-              Conteúdo informativo. Destinado a maiores de 18 anos.
-            </p>
-            <div className="inline-block px-6 py-3 border border-red-500/20 bg-red-500/5 rounded-2xl">
-              <span className="text-red-500 font-black text-xs uppercase tracking-widest">Jogue com responsabilidade</span>
-            </div>
-          </div>
+          <p className="text-gray-400 text-[10px] font-bold uppercase tracking-[0.2em] leading-loose max-w-xl mx-auto">
+            SubPay Win &copy; {new Date().getFullYear()}. Todos os direitos reservados. <br />
+            Destinado a maiores de 18 anos. Jogue com responsabilidade.
+          </p>
         </div>
       </footer>
     </div>
