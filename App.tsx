@@ -11,21 +11,18 @@ import { SprayCan, Zap, ShieldCheck, DollarSign, TrendingUp } from 'lucide-react
 
 const App: React.FC = () => {
   useEffect(() => {
-    // Immediate safe cleanup of loader on mount
-    const removeLoader = () => {
-      const loader = document.getElementById('loading-screen');
-      if (loader) {
-        loader.style.opacity = '0';
-        loader.style.pointerEvents = 'none';
-        setTimeout(() => loader.remove(), 500);
-      }
-    };
-    
-    removeLoader();
+    // Safe removal of the global loader once the app components are ready
+    const loader = document.getElementById('loading-screen');
+    if (loader) {
+      loader.classList.add('fade-out');
+      setTimeout(() => {
+        if (loader.parentNode) loader.parentNode.removeChild(loader);
+      }, 600);
+    }
   }, []);
 
   return (
-    <div className="min-h-screen relative flex flex-col bg-[#050505]">
+    <div className="min-h-screen relative flex flex-col bg-[#050505] opacity-100 visible">
       <RunnerBackground />
       <FloatingElements />
       <SocialProofNotifications />
@@ -38,8 +35,8 @@ const App: React.FC = () => {
         </div>
       </header>
 
-      {/* Main Content */}
-      <main className="relative z-10 flex-1 flex flex-col items-center">
+      {/* Main Content - Forced visible and relatively positioned */}
+      <main className="relative z-10 flex-1 flex flex-col items-center opacity-100">
         
         {/* Hero Section */}
         <section className="w-full px-6 pt-12 pb-24 text-center max-w-5xl mx-auto">
@@ -51,7 +48,7 @@ const App: React.FC = () => {
             CONEXÃO ESTRATÉGICA ATIVA ⚡
           </div>
           
-          <h2 className="font-urban text-5xl md:text-8xl font-black leading-[1.1] mb-6 drop-shadow-[0_10px_10px_rgba(0,0,0,0.8)]">
+          <h2 className="font-urban text-5xl md:text-8xl font-black leading-[1.1] mb-6 drop-shadow-[0_10px_10px_rgba(0,0,0,0.8)] text-white">
             ENTRE NO JOGO COM <br />
             <span className="gold-text italic">ESTRATÉGIA</span>
           </h2>
@@ -63,7 +60,7 @@ const App: React.FC = () => {
           <div className="flex flex-col items-center gap-4">
             <Button text="👉 JOGAR AGORA" pulse className="w-full md:w-auto min-w-[300px]" />
             <p className="text-gray-500 text-[10px] font-bold uppercase tracking-widest mt-2 flex items-center gap-2">
-              <ShieldCheck className="w-3 h-3" /> Plataforma 100% Verificada
+              <ShieldCheck className="w-3 h-3 text-green-500" /> Plataforma 100% Verificada
             </p>
           </div>
 
@@ -73,7 +70,7 @@ const App: React.FC = () => {
         {/* Benefits Grid */}
         <section className="w-full py-20 px-6 bg-gradient-to-t from-black to-transparent">
           <div className="max-w-6xl mx-auto">
-            <h3 className="font-urban text-center text-2xl md:text-4xl font-black mb-16 uppercase italic">
+            <h3 className="font-urban text-center text-2xl md:text-4xl font-black mb-16 uppercase italic text-white">
               VANTAGEM <span className="text-green-500">EXPERIENCE</span>
             </h3>
             
