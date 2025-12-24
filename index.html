@@ -1,6 +1,6 @@
 
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-br" class="dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -8,36 +8,44 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
     <style>
+      :root {
+        --bg-color: #050505;
+        --primary-green: #22c55e;
+        --gold: #eab308;
+      }
+      
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+
       body {
         font-family: 'Inter', sans-serif;
-        background-color: #050505;
+        background-color: var(--bg-color);
         color: #ffffff;
         overflow-x: hidden;
+        min-height: 100vh;
       }
+
       .font-urban { font-family: 'Orbitron', sans-serif; }
       
-      /* Runner Track Animation */
+      /* Essential for the Runner Effect */
+      .perspective-1000 {
+        perspective: 1000px;
+      }
+
+      /* Track Animation - ensures movement feel */
       @keyframes trackMove {
-        0% { transform: translateY(0) scaleX(1); opacity: 0; }
-        10% { opacity: 1; }
-        100% { transform: translateY(100vh) scaleX(2.5); opacity: 0; }
+        0% { transform: translateY(-100%) scaleX(1); opacity: 0; }
+        50% { opacity: 0.5; }
+        100% { transform: translateY(100%) scaleX(2); opacity: 0; }
       }
       .animate-track {
-        animation: trackMove 3s linear infinite;
+        animation: trackMove 2s linear infinite;
+        will-change: transform, opacity;
       }
 
-      /* Floating Coins */
-      @keyframes float {
-        0% { transform: translateY(0px) rotate(0deg); }
-        50% { transform: translateY(-20px) rotate(15deg); }
-        100% { transform: translateY(0px) rotate(0deg); }
-      }
-      .animate-float { animation: float 4s ease-in-out infinite; }
-
-      /* Glowing Buttons */
+      /* Button Glow */
       @keyframes glow {
-        0%, 100% { box-shadow: 0 0 5px rgba(34, 197, 94, 0.4), 0 0 10px rgba(34, 197, 94, 0.2); }
-        50% { box-shadow: 0 0 25px rgba(34, 197, 94, 0.9), 0 0 40px rgba(34, 197, 94, 0.5); }
+        0%, 100% { box-shadow: 0 0 10px rgba(34, 197, 94, 0.4); }
+        50% { box-shadow: 0 0 30px rgba(34, 197, 94, 0.8); }
       }
       .animate-glow { animation: glow 2s ease-in-out infinite; }
 
@@ -47,28 +55,84 @@
         -webkit-text-fill-color: transparent;
       }
 
-      /* Notification Animation */
+      /* Floating Animation */
+      @keyframes float {
+        0%, 100% { transform: translateY(0px) rotate(0deg); }
+        50% { transform: translateY(-20px) rotate(5deg); }
+      }
+      .animate-float { animation: float 6s ease-in-out infinite; }
+
+      /* Slow Background Pan */
+      @keyframes slowPan {
+        0%, 100% { transform: translateX(-1%); }
+        50% { transform: translateX(1%); }
+      }
+      .animate-slow-pan { animation: slowPan 25s ease-in-out infinite; }
+
+      /* Atmospheric Breathe */
+      @keyframes breathe {
+        0%, 100% { opacity: 0.4; }
+        50% { opacity: 0.7; }
+      }
+      .animate-breathe { animation: breathe 10s ease-in-out infinite; }
+
+      /* Entrance Animation */
       @keyframes slideIn {
-        from { transform: translateX(-100%) translateY(20px); opacity: 0; }
+        from { transform: translateX(-50%) translateY(20px); opacity: 0; }
         to { transform: translateX(0) translateY(0); opacity: 1; }
       }
       .notification-appear {
-        animation: slideIn 0.5s ease-out forwards;
+        animation: slideIn 0.6s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+      }
+
+      /* No-JS Fallback style */
+      noscript div {
+        background: #050505;
+        color: white;
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 2rem;
       }
     </style>
     <script type="importmap">
-{
-  "imports": {
-    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
-    "lucide-react": "https://esm.sh/lucide-react@^0.562.0",
-    "react/": "https://esm.sh/react@^19.2.3/",
-    "react": "https://esm.sh/react@^19.2.3",
-    "@google/genai": "https://esm.sh/@google/genai@^1.34.0"
-  }
-}
-</script>
+    {
+      "imports": {
+        "react-dom/": "https://esm.sh/react-dom@19.2.3/",
+        "lucide-react": "https://esm.sh/lucide-react@0.462.0",
+        "react/": "https://esm.sh/react@19.2.3/",
+        "react": "https://esm.sh/react@19.2.3",
+        "@google/genai": "https://esm.sh/@google/genai@1.34.0"
+      }
+    }
+    </script>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <!-- Loading placeholder to avoid black screen -->
+      <div id="loading-screen" style="position:fixed; inset:0; background:#050505; display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:9999;">
+        <div style="width:40px; height:40px; border:3px solid #22c55e; border-top-color:transparent; border-radius:50%; animation: spin 1s linear infinite;"></div>
+        <p style="margin-top:1rem; font-family:'Orbitron', sans-serif; color:#22c55e; font-size:0.75rem; letter-spacing:0.2em; text-transform:uppercase;">SubPay Win Loading</p>
+      </div>
+    </div>
+    <style>@keyframes spin { to { transform: rotate(360deg); } }</style>
+    <noscript>
+      <div>
+        <h1>SubPay Win</h1>
+        <p>Ative o JavaScript para visualizar o site e começar a jogar.</p>
+      </div>
+    </noscript>
+    <script type="module" src="index.tsx"></script>
+    <script type="module">
+      // Clean up loader after a small delay to ensure React is ready
+      window.addEventListener('load', () => {
+        setTimeout(() => {
+          document.getElementById('loading-screen')?.fadeOut?.();
+          document.getElementById('loading-screen')?.remove();
+        }, 500);
+      });
+    </script>
   </body>
 </html>

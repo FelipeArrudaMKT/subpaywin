@@ -3,50 +3,82 @@ import React from 'react';
 
 export const RunnerBackground: React.FC = () => {
   return (
-    <div className="fixed inset-0 pointer-events-none z-0 bg-black overflow-hidden">
-      {/* Sky/City Gradient */}
-      <div className="absolute inset-0 bg-gradient-to-b from-purple-900/20 via-black to-black opacity-60"></div>
+    <div className="fixed inset-0 pointer-events-none z-0 bg-[#050505] overflow-hidden">
+      {/* Distant City Sky with Breathing Glow */}
+      <div className="absolute inset-0 bg-gradient-to-b from-green-900/10 via-black to-black"></div>
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_40%,rgba(34,197,94,0.05),transparent_70%)] animate-breathe"></div>
       
-      {/* Metro Tracks (Perspective) */}
-      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-[60vh] perspective-1000">
-        {[0, 1, 2].map((i) => (
+      {/* Moving Speed Lines */}
+      <div className="absolute inset-0 opacity-20">
+        {Array.from({ length: 10 }).map((_, i) => (
           <div 
-            key={i} 
-            className="absolute top-0 left-1/2 -translate-x-1/2 w-[2px] h-full bg-gradient-to-t from-green-500/40 to-transparent animate-track"
-            style={{ 
-                left: `${35 + (i * 15)}%`,
-                animationDelay: `${i * 1}s` 
+            key={i}
+            className="absolute bg-white/40 w-[1px] h-24 animate-track"
+            style={{
+              left: `${Math.random() * 100}%`,
+              animationDuration: `${1.5 + Math.random()}s`,
+              animationDelay: `${Math.random() * 2}s`
             }}
           ></div>
         ))}
-        
-        {/* Horizontal ties */}
-        <div className="absolute bottom-0 left-0 w-full h-1 bg-green-500/20 blur-sm"></div>
       </div>
 
-      {/* Stylized Buildings (Static Shapes) */}
-      <div className="absolute bottom-0 w-full h-[40vh] flex items-end justify-between px-10 opacity-30">
-        <div className="w-24 h-64 bg-zinc-900 rounded-t-lg border-t-2 border-green-500/20"></div>
-        <div className="w-32 h-80 bg-zinc-900 rounded-t-lg border-t-2 border-yellow-500/20"></div>
-        <div className="hidden md:block w-20 h-56 bg-zinc-900 rounded-t-lg border-t-2 border-green-500/20"></div>
-        <div className="w-40 h-96 bg-zinc-900 rounded-t-lg border-t-2 border-yellow-500/20"></div>
-        <div className="w-24 h-72 bg-zinc-900 rounded-t-lg border-t-2 border-green-500/20"></div>
+      {/* Metro Tracks in Perspective */}
+      <div className="absolute top-[40%] left-1/2 -translate-x-1/2 w-[120%] h-[60%] perspective-1000">
+        <div className="absolute inset-0 flex justify-center">
+          {/* Main Perspective Rails */}
+          <div className="absolute w-[2px] h-[200%] bg-green-500/20 rotate-y-[-20deg] -translate-x-48 origin-top"></div>
+          <div className="absolute w-[2px] h-[200%] bg-green-500/20 rotate-y-[20deg] translate-x-48 origin-top"></div>
+          
+          {/* Ground Grid */}
+          <div 
+            className="absolute inset-0 opacity-10"
+            style={{
+              backgroundImage: `linear-gradient(to bottom, transparent, rgba(34, 197, 94, 0.2)), 
+                                repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(34, 197, 94, 0.2) 40px)`
+            }}
+          ></div>
+
+          {/* Animated Ties (Planks) */}
+          {[0, 0.4, 0.8, 1.2, 1.6].map((delay, i) => (
+            // Fix: Added missing '>' to properly close the opening div tag
+            <div 
+              key={i}
+              className="absolute top-0 w-[60%] h-4 bg-green-500/10 border-y border-green-500/20 animate-track"
+              style={{ animationDelay: `${delay}s` }}
+            ></div>
+          ))}
+        </div>
       </div>
 
-      {/* Glowing particles / "Coins" */}
-      {Array.from({ length: 12 }).map((_, i) => (
-        <div 
-          key={i}
-          className="absolute bg-yellow-500 rounded-full blur-[2px] opacity-40 animate-float"
-          style={{
-            width: Math.random() * 10 + 5 + 'px',
-            height: Math.random() * 10 + 5 + 'px',
-            top: Math.random() * 80 + '%',
-            left: Math.random() * 90 + '%',
-            animationDelay: Math.random() * 5 + 's'
-          }}
-        ></div>
-      ))}
+      {/* Buildings silhouettes with slow panning parallax */}
+      <div className="absolute bottom-0 w-[110%] -left-[5%] h-1/2 flex items-end justify-between px-10 opacity-10 animate-slow-pan">
+        <div className="w-16 h-32 bg-zinc-800 rounded-t-lg"></div>
+        <div className="w-24 h-48 bg-zinc-800 rounded-t-lg"></div>
+        <div className="w-20 h-64 bg-zinc-800 rounded-t-lg hidden md:block"></div>
+        <div className="w-32 h-80 bg-zinc-800 rounded-t-lg"></div>
+        <div className="w-16 h-40 bg-zinc-800 rounded-t-lg"></div>
+        <div className="w-28 h-56 bg-zinc-800 rounded-t-lg hidden lg:block"></div>
+        <div className="w-12 h-24 bg-zinc-800 rounded-t-lg"></div>
+      </div>
+
+      {/* Floating $ Symbols - already used float in index.html */}
+      <div className="absolute inset-0">
+        {Array.from({ length: 8 }).map((_, i) => (
+          <div 
+            key={i}
+            className="absolute text-green-500/20 font-black text-4xl select-none animate-float"
+            style={{
+              top: `${20 + Math.random() * 60}%`,
+              left: `${10 + Math.random() * 80}%`,
+              animationDelay: `${i * 0.8}s`,
+              animationDuration: `${5 + Math.random() * 5}s`
+            }}
+          >
+            $
+          </div>
+        ))}
+      </div>
     </div>
   );
 };
